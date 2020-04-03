@@ -14,15 +14,15 @@ export default class DogApiRepository extends Repository {
             }
         })
     }
-
+    
     fetchData(): Promise<any> { 
         return fetch('https://dog.ceo/api/breeds/list/all')
-                .then((response) => response.json())
-                .catch((error) => console.error(error));
+        .then((response) => response.json())
+        .catch((error) => console.error(error));
     }
-
+    
     JSONtoDogs(json : any) : Array<Dog> {
-        let dogs : Array<Dog>;
+        let dogs : Array<Dog> = [];
         let id : any = 0;
         let jsonDogs : any = json.message;
         for(var attr in jsonDogs){
@@ -32,14 +32,14 @@ export default class DogApiRepository extends Repository {
             if (breed.length > 0){
                 breed.forEach((subBreed, index) => {
                     dog = new Dog(id, attr, subBreed);
-                    dogs.push(dog);
+                    dogs.concat(dog);
                     if(index+1 !== breed.length){
                         id = id+1;
                     }
                 })
             }else{
                 dog = new Dog(id, attr);
-                dogs.push(dog);
+                dogs.concat(dog);
             }
         }
 
