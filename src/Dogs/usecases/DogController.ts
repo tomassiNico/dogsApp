@@ -2,7 +2,7 @@ import Repository from "../repositories/Repository"
 import DogApiRepository from "../repositories/APIRepository";
 import Dog from "../entitties/Dog";
 
-class DogListController {
+class DogController {
     repository : Repository;
     dogList : Array<Dog>;
 
@@ -18,11 +18,20 @@ class DogListController {
             return err
         }
     }
+
+    async getDogImage(dog : Dog) : Promise<String> {
+        try{
+            let image : String = await this.repository.getDogImage(dog);
+            return image;
+        }catch(err){
+            return err
+        }
+    }
 }
 
 export class DogsAPIListFactory {
-    static buildDogListController() : DogListController {
-        const dogsList :  DogListController = new DogListController();
+    static buildDogListController() : DogController {
+        const dogsList :  DogController = new DogController();
         const repo : DogApiRepository = new DogApiRepository();
         dogsList.setReposotory(repo);
         return dogsList;
