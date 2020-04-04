@@ -1,6 +1,6 @@
 import Repository from "../repositories/Repository"
 import DogApiRepository from "../repositories/APIRepository";
-import Dog from "../entitties/Dog";
+import Dog from "../entities/Dog";
 
 class DogController {
     repository : Repository;

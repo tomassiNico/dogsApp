@@ -1,4 +1,4 @@
-import Dog from '../entitties/Dog';
+import Dog from '../entities/Dog';
 import Repository from './Repository';
 
 export default class DogApiRepository extends Repository {
