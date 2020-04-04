@@ -2,10 +2,26 @@ import Dog from '../entitties/Dog';
 import Repository from './Repository';
 
 export default class DogApiRepository extends Repository {
+    BASEAPI : String = 'https://dog.ceo/api/';
+
+    getDogImage(dog: Dog): Promise<String> {
+        return new Promise( async (res, rej) => {
+            try{
+                let endpoinBreed = `${dog.breed}${dog.subBreed ? '/'+dog.subBreed : ''}`
+                let responseJSON : any = await this.fetchData(`breed/${endpoinBreed}/images/random`);
+                let image : String = responseJSON.message;
+                res(image);
+            }catch(err){
+                console.error(err);
+                rej(err);
+            }
+        });
+    }
+
     getDogsList(): Promise<Array<Dog>> {
         return new Promise(async (res, rej) => {
             try { 
-                let responseJson : any = await this.fetchData();
+                let responseJson : any = await this.fetchData('breeds/list/all');
                 let dogs : Array<Dog> = this.JSONtoDogs(responseJson);
                 res(dogs);
             }catch(err){
@@ -15,10 +31,10 @@ export default class DogApiRepository extends Repository {
         })
     }
     
-    fetchData(): Promise<any> { 
-        return fetch('https://dog.ceo/api/breeds/list/all')
-        .then((response) => response.json())
-        .catch((error) => console.error(error));
+    fetchData(endpoint): Promise<any> { 
+        return fetch(this.BASEAPI+endpoint)
+            .then((response) => response.json())
+            .catch((error) => console.error(error));
     }
     
     JSONtoDogs(json : any) : Array<Dog> {
