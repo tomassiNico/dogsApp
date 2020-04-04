@@ -1,45 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { DogsAPIListFactory } from '../../usecases/ListDogs';
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList, Text, StyleSheet } from 'react-native';
 import Layout from './DogsListLayout';
 import Empty from './Empty';
 import Separator from './Separator';
-
-const DogItem = ({ breed, subBreed }) => (
-    <Text>{subBreed} {breed}</Text>
-);
+import Dog from './Dog';
 
 const DogsList = () => {
-    /* const [dogs, setDogs] = useState([]);
+    const [dogs, setDogs] = useState([]);
     const [loading, setLoading] = useState(true);
     
     useEffect(() => {
         const fetchData = async () => {
             const dogsController = DogsAPIListFactory.buildDogListController();
             const dogList = await dogsController.getDogList();
-            YellowBox.ignoreWarnings(['Warning: ...']);
             setDogs(dogList);
         };
 
         fetchData();
-    }, []); */
-    const dogs = [
-        {
-            id: 'bree',
-            breed: 'dogo',
-            subBreed: 'argentino'
-        },
-        {
-            id: 'bre2',
-            breed: 'Bulldog',
-            subBreed: 'Frances'
-        },
-        {
-            id: 'br2e2',
-            breed: 'Bulldog',
-            subBreed: 'Aleman'
-        },
-    ]
+    }, []);
 
     const renderEmpty = () => (
         <Empty text="No hay perros disponibles" />
@@ -56,7 +35,8 @@ const DogsList = () => {
                     data={dogs}
                     ListEmptyComponent={renderEmpty}
                     ItemSeparatorComponent={itemSeparator}
-                    renderItem={({ item : {breed, subBreed}}) => <DogItem breed={breed} subBreed={subBreed} />}
+                    renderItem={({ item : {id, breed, subBreed}}) => <Dog key={id} breed={breed} subBreed={subBreed} />}
+                    keyExtractor={({ id }) => id.toString()}
                 />
             </Layout>
         </View>

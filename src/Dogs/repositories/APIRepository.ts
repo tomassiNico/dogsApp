@@ -32,14 +32,14 @@ export default class DogApiRepository extends Repository {
             if (breed.length > 0){
                 breed.forEach((subBreed, index) => {
                     dog = new Dog(id, attr, subBreed);
-                    dogs.concat(dog);
+                    dogs = dogs.concat(dog);
                     if(index+1 !== breed.length){
                         id = id+1;
                     }
                 })
             }else{
                 dog = new Dog(id, attr);
-                dogs.concat(dog);
+                dogs = dogs.concat(dog);
             }
         }
 

@@ -26,11 +26,11 @@ const Header = props => (
 const styles = StyleSheet.create({
     logo: {
         width: 80,
-        height: 70,
+        height: 60,
         resizeMode: 'contain'
     },
     container: {
-        padding: 5,
+        paddingHorizontal: 10,
         flexDirection: 'row'
     },
     right: {
