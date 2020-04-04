@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { DogsAPIListFactory } from '../../usecases/ListDogs';
-import { View, FlatList, Text, StyleSheet } from 'react-native';
+import { DogsAPIListFactory } from '../../usecases/DogController';
+import { View, FlatList } from 'react-native';
 import Layout from './DogsListLayout';
 import Empty from './Empty';
 import Separator from './Separator';
@@ -29,14 +29,15 @@ const DogsList = () => {
     )
 
     return (
-        <View>
-            <Layout title="Lista de perros">
+        <View style={{flex: 1, paddingBottom: 16}}>
+            <Layout title="Lista de perros" >
                 <FlatList
                     data={dogs}
                     ListEmptyComponent={renderEmpty}
                     ItemSeparatorComponent={itemSeparator}
-                    renderItem={({ item : {id, breed, subBreed}}) => <Dog key={id} breed={breed} subBreed={subBreed} />}
+                    renderItem={({ item : {id, breed, subBreed}}) => <Dog breed={breed} subBreed={subBreed} />}
                     keyExtractor={({ id }) => id.toString()}
+                    initialNumToRender={10}
                 />
             </Layout>
         </View>

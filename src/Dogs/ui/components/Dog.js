@@ -1,41 +1,72 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
+import { DogsAPIListFactory } from '../../usecases/DogController';
 
 
-const Dog = props => (
-    <View style={styles.container}>
-        <View style={styles.left}>
-            <Image
-                source={{uri: 'https://images.dog.ceo/breeds/basenji/n02110806_3974.jpg'}}
-                style={styles.image}
-            />
+const Dog = ({breed, subBreed}) => {
+    const [image, setImage] = useState(null);
+    var _isMounted = false;
+
+    useEffect(() => {
+        _isMounted =true;
+        const getImage = async () => {
+            try{
+                const dogsController = DogsAPIListFactory.buildDogListController();
+                const imageURI = await dogsController.getDogImage({ breed, subBreed});
+                setImage(imageURI);
+            }catch(err){
+                console.log(err);
+            }
+        }
+
+        if(_isMounted && !image){
+            getImage();
+        }
+
+        return () => {
+            _isMounted = false;
+        }
+    }, [])
+
+    return (
+        <View style={styles.container}>
+            {image && (
+            <View style={styles.imageContainer}>
+                <Image
+                    source={{uri: image}}
+                    style={styles.image}
+                />
+            </View>)
+                }
+            <View style={styles.textContainer}>
+                <Text style={styles.text}>{subBreed && `${subBreed} `}{breed}</Text>
+            </View>
         </View>
-        <View style={styles.right}>
-            <Text style={styles.text}>{props.subBreed && `${props.subBreed} `}{props.breed}</Text>
-        </View>
-    </View>
-)
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
         paddingVertical: 8
     },
-    left: {
-        paddingHorizontal: 8
-    },
-    right: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    imageContainer: {
+        flex: 1,
         paddingHorizontal: 8,
+        paddingTop: 8,
+        alignItems: 'center'
+    },
+    textContainer: {
+        alignItems: 'center',
+        paddingVertical: 8,
     },
     text: {
         fontWeight: "bold",
-        fontSize: 16
+        fontSize: 24,
+        textTransform: "capitalize"
     },
     image: {
-        width: 70,
-        height: 60,
+        width: 300,
+        height: 200,
     }
 })
 
