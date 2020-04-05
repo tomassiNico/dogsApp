@@ -1,4 +1,4 @@
-import Dog from '../entitties/Dog'; 
+import Dog from '../entities/Dog'; 
 
 export default abstract class Repository {
     abstract getDogsList() : Promise<Array<Dog>>;
