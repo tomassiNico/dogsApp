@@ -26,18 +26,15 @@ const Dog = ({breed, subBreed}) => {
         return () => {
             _isMounted = false;
         }
-    }, [])
+    }, [subBreed])
 
     return (
         <View style={styles.container}>
             {image && (
-            <View style={styles.imageContainer}>
                 <Image
                     source={{uri: image}}
                     style={styles.image}
-                />
-            </View>)
-                }
+                />)}
             <View style={styles.textContainer}>
                 <Text style={styles.text}>{subBreed && `${subBreed} `}{breed}</Text>
             </View>
@@ -47,13 +44,11 @@ const Dog = ({breed, subBreed}) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 8
-    },
-    imageContainer: {
-        flex: 1,
-        paddingHorizontal: 8,
-        paddingTop: 8,
-        alignItems: 'center'
+        backgroundColor: '#fff',
+        marginHorizontal: 16,
+        marginVertical: 8,
+        elevation: 1
+        
     },
     textContainer: {
         alignItems: 'center',
@@ -65,8 +60,8 @@ const styles = StyleSheet.create({
         textTransform: "capitalize"
     },
     image: {
-        width: 300,
-        height: 200,
+        width: '100%',
+        height: 160,
     }
 })
 
