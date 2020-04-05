@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { DogsAPIListFactory } from '../../usecases/DogController';
+import { isRequired } from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType';
 
 
 const Dog = ({breed, subBreed}) => {
@@ -30,11 +31,17 @@ const Dog = ({breed, subBreed}) => {
 
     return (
         <View style={styles.container}>
-            {image && (
+            {/* image && (
                 <Image
-                    source={{uri: image}}
-                    style={styles.image}
-                />)}
+                //source={image ? {uri: image} :require('../../../assets/images/dogDummy.png')}
+                source={{uri: image}}
+                style={styles.image}
+            />
+            ) */}
+            <Image
+                source={image ? {uri: image} :require('../../../assets/images/dogDummy.png')}
+                style={styles.image}
+            />
             <View style={styles.textContainer}>
                 <Text style={styles.text}>{subBreed && `${subBreed} `}{breed}</Text>
             </View>

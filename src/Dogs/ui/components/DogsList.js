@@ -35,7 +35,7 @@ const DogsList = () => {
                     data={dogs}
                     ListEmptyComponent={renderEmpty}
                     ItemSeparatorComponent={itemSeparator}
-                    renderItem={({ item : {id, breed, subBreed}}) => <Dog breed={breed} subBreed={subBreed} />}
+                    renderItem={({ item : {id, breed, subBreed}}) => <Dog key={id} breed={breed} subBreed={subBreed} />}
                     keyExtractor={({ id }) => id.toString()}
                     initialNumToRender={10}
                 />
