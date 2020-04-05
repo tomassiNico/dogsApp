@@ -31,13 +31,6 @@ const Dog = ({breed, subBreed}) => {
 
     return (
         <View style={styles.container}>
-            {/* image && (
-                <Image
-                //source={image ? {uri: image} :require('../../../assets/images/dogDummy.png')}
-                source={{uri: image}}
-                style={styles.image}
-            />
-            ) */}
             <Image
                 source={image ? {uri: image} :require('../../../assets/images/dogDummy.png')}
                 style={styles.image}
