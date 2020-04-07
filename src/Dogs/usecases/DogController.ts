@@ -4,7 +4,7 @@ import Dog from "../entities/Dog";
 
 class DogController {
     repository : Repository;
-    dogList : Array<Dog>;
+    dogList : Array<Dog> = [];
 
     setReposotory(repo : Repository){
         this.repository = repo;
@@ -13,6 +13,7 @@ class DogController {
     async getDogList() : Promise<Array<Dog>> {
         try{
             let dogs : Array<Dog> = await this.repository.getDogsList();
+            this.dogList = dogs;
             return dogs;
         }catch(err){
             return err
@@ -32,7 +33,7 @@ class DogController {
 export class DogsAPIListFactory {
     static buildDogListController() : DogController {
         const dogsList :  DogController = new DogController();
-        const repo : DogApiRepository = new DogApiRepository();
+        const repo : Repository = DogApiRepository.getInstance();
         dogsList.setReposotory(repo);
         return dogsList;
     }
