@@ -28,13 +28,22 @@ class DogController {
             return err
         }
     }
+
+    filterDogs(inputDog : string) : Array<Dog> {
+        const filterDogs = this.dogList.filter(dog => (dog.fullName().indexOf(inputDog) > -1));
+        return filterDogs;
+    }
 }
 
 export class DogsAPIListFactory {
+    static instance : DogController;
+
     static buildDogListController() : DogController {
-        const dogsList :  DogController = new DogController();
-        const repo : Repository = DogApiRepository.getInstance();
-        dogsList.setReposotory(repo);
-        return dogsList;
+        if(!this.instance){
+            this.instance = new DogController();
+            const repo : Repository = DogApiRepository.getInstance();
+            this.instance.setReposotory(repo);
+        }
+        return this.instance;
     }
 }

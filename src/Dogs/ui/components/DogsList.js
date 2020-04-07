@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { DogsAPIListFactory } from '../../usecases/DogController';
-import { View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, FlatList, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
 import Layout from './DogsListLayout';
 import Empty from './Empty';
 import Separator from './Separator';
@@ -9,6 +9,7 @@ import Dog from './Dog';
 const DogsList = () => {
     const [dogs, setDogs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [textInput, onChangeInput] = useState('')
     const [showFloatingButton, setShowFloatingButtonn] = useState(false);
     const flatListRef = useRef();
     
@@ -43,6 +44,12 @@ const DogsList = () => {
         }
     }
 
+    const onChangeText = text => {
+        onChangeInput(text);
+        const dogsController = DogsAPIListFactory.buildDogListController();
+        setDogs(dogsController.filterDogs(textInput));
+    }
+
     return (
         <View style={{flex: 1, paddingBottom: 16}}>
             <Layout title="Lista de perros">
@@ -55,6 +62,7 @@ const DogsList = () => {
                     renderItem={({ item : {id, breed, subBreed}}) => <Dog key={id} breed={breed} subBreed={subBreed} />}
                     keyExtractor={({ id }) => id.toString()}
                     initialNumToRender={10}
+                    ListHeaderComponent={<TextInput onChangeText={onChangeText} value={textInput} />}
                 />
                 {showFloatingButton && (
                     <TouchableOpacity onPress={toTop} style={styles.floatinButton}>
