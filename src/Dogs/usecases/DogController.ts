@@ -30,7 +30,7 @@ class DogController {
     }
 
     filterDogs(inputDog : string) : Array<Dog> {
-        const filterDogs = this.dogList.filter(dog => (dog.fullName().indexOf(inputDog) > -1));
+        const filterDogs = this.dogList.filter(dog => (dog.fullName().indexOf(inputDog.toLowerCase()) > -1));
         return filterDogs;
     }
 }

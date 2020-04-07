@@ -45,7 +45,7 @@ const DogsList = () => {
     }
 
     const onChangeText = text => {
-        onChangeInput(text);
+        onChangeInput(text.toLowerCase());
         const dogsController = DogsAPIListFactory.buildDogListController();
         setDogs(dogsController.filterDogs(textInput));
     }
