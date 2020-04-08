@@ -29,6 +29,16 @@ class DogController {
         }
     }
 
+    async getDogImages(dog : Dog) : Promise<Array<String>> {
+        try{
+            let dogsImages : Array<String> = await this.repository.getImages(dog);
+            return dogsImages
+            
+        }catch(err){
+            return err
+        }
+    }
+
     filterDogs(inputDog : string) : Array<Dog> {
         const filterDogs = this.dogList.filter(dog => (dog.fullName().indexOf(inputDog.toLowerCase()) > -1));
         return filterDogs;
