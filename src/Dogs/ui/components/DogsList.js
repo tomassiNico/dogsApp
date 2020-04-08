@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { DogsAPIListFactory } from '../../usecases/DogController';
-import { View, FlatList, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import TextInput from './TextInput';
 import Layout from './DogsListLayout';
 import Empty from './Empty';
 import Separator from './Separator';
