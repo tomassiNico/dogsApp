@@ -3,6 +3,15 @@ import Repository from './Repository';
 
 export default class DogApiRepository extends Repository {
     BASEAPI : String = 'https://dog.ceo/api/';
+    dogs : Array<Dog> = [];
+    static instance : DogApiRepository;
+
+    static getInstance(): DogApiRepository {
+        if(!this.instance){
+            this.instance = new DogApiRepository();
+        }
+        return this.instance
+    }
 
     getDogImage(dog: Dog): Promise<String> {
         return new Promise( async (res, rej) => {
@@ -20,10 +29,13 @@ export default class DogApiRepository extends Repository {
 
     getDogsList(): Promise<Array<Dog>> {
         return new Promise(async (res, rej) => {
-            try { 
-                let responseJson : any = await this.fetchData('breeds/list/all');
-                let dogs : Array<Dog> = this.JSONtoDogs(responseJson);
-                res(dogs);
+            try {
+                if(this.dogs.length < 1){
+                    let responseJson : any = await this.fetchData('breeds/list/all');
+                    const dogs = this.JSONtoDogs(responseJson);
+                    this.dogs = dogs;
+                }
+                res(this.dogs);
             }catch(err){
                 console.error(err);
                 rej(err);
