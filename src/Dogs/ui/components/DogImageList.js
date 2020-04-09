@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { DogsAPIListFactory } from '../../usecases/DogController';
 import { FlatList, Image, StyleSheet, View } from 'react-native';
 import Layout from './DogsListLayout';
 import Separator from './Separator';
 import Empty from './Empty';
+import { DogDetailContext } from '../../contexts/DogDetailContext';
 
-
-const DogImageList = ({ navigation, dog }) => {
+const DogImageList = () => {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const dog = useContext(DogDetailContext).dog;
     
     useEffect(()=>{
         const fetchImages = async () => {
+            setLoading(true);
             const dogController = DogsAPIListFactory.buildDogListController();
             const data = await dogController.getDogImages(dog ? dog : { id: 3, breed: 'african', subBreed: null});
             setImages(data);
             setLoading(false);
         }
-
         fetchImages();
     },[dog]);
 

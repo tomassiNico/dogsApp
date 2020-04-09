@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { DogsAPIListFactory } from '../../usecases/DogController';
 import { View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import TextInput from './TextInput';
@@ -6,6 +6,7 @@ import Layout from './DogsListLayout';
 import Empty from './Empty';
 import Separator from './Separator';
 import Dog from './Dog';
+import { DogDetailContext } from '../../contexts/DogDetailContext';
 
 const DogsList = ({ navigation }) => {
     const [dogs, setDogs] = useState([]);
@@ -13,6 +14,7 @@ const DogsList = ({ navigation }) => {
     const [textInput, onChangeInput] = useState('')
     const [showFloatingButton, setShowFloatingButtonn] = useState(false);
     const flatListRef = useRef();
+    const contextValue = useContext(DogDetailContext);
     
     useEffect(() => {
         const fetchData = async () => {
@@ -39,6 +41,7 @@ const DogsList = ({ navigation }) => {
     }
 
     const onScroll = (e) => {
+        // TODO: verificar esto ya que genera que se vuelvan a pedir las imagenes de los perros
         if(e.nativeEvent.contentOffset.y === 0){
             setShowFloatingButtonn(false);
         }else if(!showFloatingButton){
@@ -52,8 +55,17 @@ const DogsList = ({ navigation }) => {
         setDogs(dogsController.filterDogs(text));
     }
 
+    const onPressDog = (breed, subBreed) => {
+        let dog = {
+            breed,
+            subBreed
+        };
+        contextValue.changeDog(dog);
+        navigation.navigate('Detail');
+    }
+
     const DogWithNavigation = ({id, breed, subBreed}) => (
-        <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
+        <TouchableOpacity onPress={() => onPressDog(breed, subBreed)}>
             <Dog key={id} breed={breed} subBreed={subBreed} />
         </TouchableOpacity>
     )
@@ -92,7 +104,8 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 30,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        
     },
     arrow: {
         fontSize: 35,
