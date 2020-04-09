@@ -13,7 +13,7 @@ const DogImageList = ({ navigation, dog }) => {
     useEffect(()=>{
         const fetchImages = async () => {
             const dogController = DogsAPIListFactory.buildDogListController();
-            const data = await dogController.getDogImages(dog);
+            const data = await dogController.getDogImages(dog ? dog : { id: 3, breed: 'african', subBreed: null});
             setImages(data);
             setLoading(false);
         }
@@ -27,7 +27,7 @@ const DogImageList = ({ navigation, dog }) => {
 
     return (
         <View style={{flex: 1, paddingBottom: 16}}>
-            <Layout title={dog.breed}>
+            <Layout>
                 <FlatList
                     data={images}
                     renderItem={({ item }) =>

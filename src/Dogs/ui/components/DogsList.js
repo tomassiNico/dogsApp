@@ -7,7 +7,7 @@ import Empty from './Empty';
 import Separator from './Separator';
 import Dog from './Dog';
 
-const DogsList = () => {
+const DogsList = ({ navigation }) => {
     const [dogs, setDogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [textInput, onChangeInput] = useState('')
@@ -21,8 +21,9 @@ const DogsList = () => {
             setDogs(dogList);
             setLoading(false);
         };
-
-        fetchData();
+        if(!dogs.length){
+            fetchData();
+        }
     }, []);
 
     const renderEmpty = () => (
@@ -51,16 +52,22 @@ const DogsList = () => {
         setDogs(dogsController.filterDogs(text));
     }
 
+    const DogWithNavigation = ({id, breed, subBreed}) => (
+        <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
+            <Dog key={id} breed={breed} subBreed={subBreed} />
+        </TouchableOpacity>
+    )
+
     return (
-        <View style={{flex: 1, paddingBottom: 16}}>
-            <Layout title="Lista de perros">
+        <View style={{flex: 1}}>
+            <Layout>
                 <FlatList
                     ref={flatListRef}
                     onScroll={onScroll}
                     data={dogs}
                     ListEmptyComponent={renderEmpty}
                     ItemSeparatorComponent={itemSeparator}
-                    renderItem={({ item : {id, breed, subBreed}}) => <Dog key={id} breed={breed} subBreed={subBreed} />}
+                    renderItem={({ item : {id, breed, subBreed}}) => <DogWithNavigation key={id} breed={breed} subBreed={subBreed} />}
                     keyExtractor={({ id }) => id.toString()}
                     initialNumToRender={10}
                     ListHeaderComponent={<TextInput onChangeText={onChangeText} value={textInput} />}
