@@ -9,6 +9,12 @@ export default class Dog {
     }
 
     fullName() : String {
-        return `${this.subBreed ? this.subBreed + ' ' : ''}${this.breed}`
+        let fullName = `${this.subBreed ? this.subBreed + ' ' : ''}${this.breed}`;
+        fullName = fullName.toLowerCase()
+                    .split(' ')
+                    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+                    .join(' ');
+
+        return fullName
     }
 }

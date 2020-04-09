@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { DogsAPIListFactory } from '../../usecases/DogController';
 import { View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import TextInput from './TextInput';
@@ -6,8 +6,9 @@ import Layout from './DogsListLayout';
 import Empty from './Empty';
 import Separator from './Separator';
 import Dog from './Dog';
+import { DogDetailContext } from '../../contexts/DogDetailContext';
 
-const DogsList = () => {
+const DogsList = ({ navigation }) => {
     const [dogs, setDogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [textInput, onChangeInput] = useState('')
@@ -21,8 +22,9 @@ const DogsList = () => {
             setDogs(dogList);
             setLoading(false);
         };
-
-        fetchData();
+        if(!dogs.length){
+            fetchData();
+        }
     }, []);
 
     const renderEmpty = () => (
@@ -38,6 +40,7 @@ const DogsList = () => {
     }
 
     const onScroll = (e) => {
+        // TODO: verificar esto ya que genera que se vuelvan a pedir las imagenes de los perros
         if(e.nativeEvent.contentOffset.y === 0){
             setShowFloatingButtonn(false);
         }else if(!showFloatingButton){
@@ -52,19 +55,19 @@ const DogsList = () => {
     }
 
     return (
-        <View style={{flex: 1, paddingBottom: 16}}>
-            <Layout title="Lista de perros">
+        <View style={{flex: 1}}>
+            <Layout>
                 <FlatList
                     ref={flatListRef}
                     onScroll={onScroll}
                     data={dogs}
                     ListEmptyComponent={renderEmpty}
                     ItemSeparatorComponent={itemSeparator}
-                    renderItem={({ item : {id, breed, subBreed}}) => <Dog key={id} breed={breed} subBreed={subBreed} />}
+                    renderItem={({ item : {id, breed, subBreed}}) => <DogWithNavigation navigation={navigation} key={id} breed={breed} subBreed={subBreed} />}
                     keyExtractor={({ id }) => id.toString()}
                     initialNumToRender={10}
                     ListHeaderComponent={<TextInput onChangeText={onChangeText} value={textInput} />}
-                />
+                    />
                 {showFloatingButton && (
                     <TouchableOpacity onPress={toTop} style={styles.floatinButton}>
                         <Text style={styles.arrow}>↑</Text>
@@ -72,6 +75,23 @@ const DogsList = () => {
                 )}
             </Layout>
         </View>
+    )
+}
+
+const DogWithNavigation = ({navigation, id, breed, subBreed}) => {
+    const contextValue = useContext(DogDetailContext);
+    
+    const onPressDog = (breed, subBreed) => {
+        const dogsController = DogsAPIListFactory.buildDogListController();
+        const dog = dogsController.findDog(breed, subBreed);
+        contextValue.changeDog(dog);
+        navigation.navigate('Detail', { title: `${dog.fullName()}`});
+    }
+    
+    return (
+        <TouchableOpacity onPress={() => onPressDog(breed, subBreed)}>
+            <Dog key={id} breed={breed} subBreed={subBreed} />
+        </TouchableOpacity>
     )
 }
 
@@ -85,7 +105,8 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 30,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        
     },
     arrow: {
         fontSize: 35,

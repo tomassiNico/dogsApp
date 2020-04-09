@@ -27,7 +27,7 @@ const Dog = ({breed, subBreed}) => {
         return () => {
             _isMounted = false;
         }
-    }, [subBreed])
+    }, [subBreed, breed])
 
     return (
         <View style={styles.container}>

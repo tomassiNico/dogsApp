@@ -29,8 +29,24 @@ class DogController {
         }
     }
 
+    async getDogImages(dog : Dog) : Promise<Array<String>> {
+        try{
+            let dogsImages : Array<String> = await this.repository.getImages(dog);
+            return dogsImages
+            
+        }catch(err){
+            return err
+        }
+    }
+
+    findDog(breed : string , subBreed : string) : Dog {
+        let dog : Dog;
+        dog = this.dogList.find(dog => (dog.breed === breed && dog.subBreed === subBreed));
+        return dog
+    }
+
     filterDogs(inputDog : string) : Array<Dog> {
-        const filterDogs = this.dogList.filter(dog => (dog.fullName().indexOf(inputDog.toLowerCase()) > -1));
+        const filterDogs = this.dogList.filter(dog => (dog.fullName().toLowerCase().indexOf(inputDog.toLowerCase()) > -1));
         return filterDogs;
     }
 }
