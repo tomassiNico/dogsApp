@@ -26,6 +26,20 @@ export default class DogApiRepository extends Repository {
             }
         });
     }
+    
+    getImages(dog: Dog) : Promise<Array<String>> {
+        return new Promise(async (res, rej) => {
+            try{
+                let endpoinBreed = `${dog.breed}${dog.subBreed ? '/'+dog.subBreed : ''}`
+                let responseJSON : any = await this.fetchData(`breed/${endpoinBreed}/images`);
+                let images : Array<String> = responseJSON.message;
+                res(images);
+            }catch(err){
+                console.error(err);
+                rej(err);
+            }
+        })
+    }
 
     getDogsList(): Promise<Array<Dog>> {
         return new Promise(async (res, rej) => {
