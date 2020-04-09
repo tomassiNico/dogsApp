@@ -41,7 +41,7 @@ const App: () => React$Node = () => {
           <Stack.Screen
             name="Detail"
             component={DogImageList}
-            options={{title:"Detail"}}
+            options={({route}) => ({title:route.params.title})}
             />
         </Stack.Navigator>
       </NavigationContainer>

@@ -39,6 +39,12 @@ class DogController {
         }
     }
 
+    findDog(breed : string , subBreed : string) : Dog {
+        let dog : Dog;
+        dog = this.dogList.find(dog => (dog.breed === breed && dog.subBreed === subBreed));
+        return dog
+    }
+
     filterDogs(inputDog : string) : Array<Dog> {
         const filterDogs = this.dogList.filter(dog => (dog.fullName().indexOf(inputDog.toLowerCase()) > -1));
         return filterDogs;

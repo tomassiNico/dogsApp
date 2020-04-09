@@ -14,7 +14,6 @@ const DogsList = ({ navigation }) => {
     const [textInput, onChangeInput] = useState('')
     const [showFloatingButton, setShowFloatingButtonn] = useState(false);
     const flatListRef = useRef();
-    const contextValue = useContext(DogDetailContext);
     
     useEffect(() => {
         const fetchData = async () => {
@@ -55,21 +54,6 @@ const DogsList = ({ navigation }) => {
         setDogs(dogsController.filterDogs(text));
     }
 
-    const onPressDog = (breed, subBreed) => {
-        let dog = {
-            breed,
-            subBreed
-        };
-        contextValue.changeDog(dog);
-        navigation.navigate('Detail');
-    }
-
-    const DogWithNavigation = ({id, breed, subBreed}) => (
-        <TouchableOpacity onPress={() => onPressDog(breed, subBreed)}>
-            <Dog key={id} breed={breed} subBreed={subBreed} />
-        </TouchableOpacity>
-    )
-
     return (
         <View style={{flex: 1}}>
             <Layout>
@@ -79,11 +63,11 @@ const DogsList = ({ navigation }) => {
                     data={dogs}
                     ListEmptyComponent={renderEmpty}
                     ItemSeparatorComponent={itemSeparator}
-                    renderItem={({ item : {id, breed, subBreed}}) => <DogWithNavigation key={id} breed={breed} subBreed={subBreed} />}
+                    renderItem={({ item : {id, breed, subBreed}}) => <DogWithNavigation navigation={navigation} key={id} breed={breed} subBreed={subBreed} />}
                     keyExtractor={({ id }) => id.toString()}
                     initialNumToRender={10}
                     ListHeaderComponent={<TextInput onChangeText={onChangeText} value={textInput} />}
-                />
+                    />
                 {showFloatingButton && (
                     <TouchableOpacity onPress={toTop} style={styles.floatinButton}>
                         <Text style={styles.arrow}>↑</Text>
@@ -91,6 +75,23 @@ const DogsList = ({ navigation }) => {
                 )}
             </Layout>
         </View>
+    )
+}
+
+const DogWithNavigation = ({navigation, id, breed, subBreed}) => {
+    const contextValue = useContext(DogDetailContext);
+    
+    const onPressDog = (breed, subBreed) => {
+        const dogsController = DogsAPIListFactory.buildDogListController();
+        const dog = dogsController.findDog(breed, subBreed);
+        contextValue.changeDog(dog);
+        navigation.navigate('Detail', { title: `${dog.fullName()}`});
+    }
+    
+    return (
+        <TouchableOpacity onPress={() => onPressDog(breed, subBreed)}>
+            <Dog key={id} breed={breed} subBreed={subBreed} />
+        </TouchableOpacity>
     )
 }
 
