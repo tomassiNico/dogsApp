@@ -1,6 +1,4 @@
 @echo off
-echo Presione cualquier tecla para iniciar el emulador...
-pause>nul
 start emulator -avd Pixel_2_API_28
 echo Cuando el emulador este iniciado presine cualquier tecla...
 pause>nul

@@ -5,6 +5,7 @@ import Layout from './DogsListLayout';
 import Separator from './Separator';
 import Empty from './Empty';
 import { DogDetailContext } from '../../contexts/DogDetailContext';
+import CircularProgress from './CircularProgress';
 
 const DogImageList = () => {
     const [images, setImages] = useState([]);
@@ -23,9 +24,11 @@ const DogImageList = () => {
         fetchImages();
     },[dog]);
 
-    const renderEmpty = () => (
-        <Empty text={loading ? "Cargando..." : "No hay imagenes del perro"} />
-    )
+    const renderEmpty = () => loading ? (
+        <CircularProgress />
+    ) : (
+        <Empty text="No hay imagenes del perro" />
+    );
 
     return (
         <View style={{flex: 1, paddingBottom: 16}}>

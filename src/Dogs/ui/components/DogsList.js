@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { DogsAPIListFactory } from '../../usecases/DogController';
 import { View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
+
 import TextInput from './TextInput';
 import Layout from './DogsListLayout';
 import Empty from './Empty';
 import Separator from './Separator';
 import Dog from './Dog';
 import { DogDetailContext } from '../../contexts/DogDetailContext';
+import CircularProgress from './CircularProgress';
+
+
 
 const DogsList = ({ navigation }) => {
     const [dogs, setDogs] = useState([]);
@@ -27,9 +31,11 @@ const DogsList = ({ navigation }) => {
         }
     }, []);
 
-    const renderEmpty = () => (
-        <Empty text={loading ? "Cargando..." : "No hay perros disponibles"} />
-    )
+    const renderEmpty = () => loading ? (
+        <CircularProgress />
+    ) : (
+        <Empty text="No hay perros disponibles" />
+    );
 
     const itemSeparator = () => (
         <Separator />
@@ -113,6 +119,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         top: -3,
         left: -0.5
+    },
+    circularProgress: {
+        flex:1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })
 
